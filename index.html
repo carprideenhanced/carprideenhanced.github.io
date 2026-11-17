@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carpride Enhanced — firmware amélioré pour Carpuride W702BS</title>
+<meta name="description" content="Carpride Enhanced : firmware modifié pour l'écran moto Carpuride W702BS / 702BS Pro. Compteurs TFT, Sport, Cockpit, carnet de trajets, alertes, mises à jour Wi-Fi. Version Basique gratuite et Premium.">
+<meta name="theme-color" content="#06080b">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Carpride Enhanced">
+<meta property="og:description" content="Firmware amélioré pour l'écran moto Carpuride W702BS / 702BS Pro.">
+<meta property="og:image" content="assets/img/fr/tft.webp">
+<style>
+@font-face{font-family:Barlow;src:url(assets/fonts/Barlow-Regular.ttf);font-weight:400;font-display:swap}
+@font-face{font-family:Barlow;src:url(assets/fonts/Barlow-Medium.ttf);font-weight:500;font-display:swap}
+@font-face{font-family:Barlow;src:url(assets/fonts/Barlow-SemiBold.ttf);font-weight:600;font-display:swap}
+:root{--bg:#06080b;--bg2:#0b0f14;--card:#10151c;--line:#1c2430;--txt:#e9eef5;--mut:#8a96a8;--blue:#2f7bff;--blue2:#5aa0ff;--red:#ff3b3b;--amber:#ffb020;--ok:#3ddc84;--r:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--bg);color:var(--txt);font:400 17px/1.55 Barlow,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.w{max-width:1180px;margin:0 auto;padding:0 24px}
+.eyebrow{font-weight:600;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue2)}
+h1,h2,h3{font-weight:600;line-height:1.05;letter-spacing:-.01em}
+h2{font-size:clamp(32px,4.4vw,52px);margin:.35em 0 .4em}
+.lead{color:var(--mut);font-size:19px;max-width:640px}
+section,header{position:relative;overflow-x:clip}section{padding:110px 0}
+/* nav */
+nav{position:fixed;inset:0 0 auto;z-index:50;backdrop-filter:blur(14px);background:rgba(6,8,11,.72);border-bottom:1px solid transparent;transition:.3s}
+nav.s{border-color:var(--line)}
+nav .w{display:flex;align-items:center;height:64px;gap:28px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:20px;letter-spacing:.04em}
+.logo .enh{color:var(--blue2);font-weight:500;margin-left:-3px}
+.logo i{width:26px;height:26px;border-radius:7px;background:conic-gradient(from 210deg,var(--blue),#0d3a8a,var(--blue2),var(--blue));box-shadow:0 0 18px rgba(47,123,255,.55);position:relative}
+.logo i:after{content:"";position:absolute;inset:7px;border-radius:3px;background:var(--bg)}
+nav ul{display:flex;gap:26px;list-style:none;margin-left:auto;font-size:15px;color:var(--mut)}
+nav ul a:hover{color:var(--txt)}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:12px;font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;transition:.2s;cursor:pointer;border:0}
+.btn.p{background:var(--blue);color:#fff;box-shadow:0 8px 30px -8px rgba(47,123,255,.8),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn.p:hover{background:#4a8dff;transform:translateY(-1px)}
+.btn.g{border:1px solid #2a3442;color:var(--txt)}
+.btn.g:hover{border-color:var(--blue2)}
+.btn.soon{opacity:.55;cursor:default;pointer-events:none;box-shadow:none}
+nav .btn{padding:9px 16px;font-size:13px}
+/* hero */
+.hero{padding:150px 0 60px;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:-20% -10% auto;height:900px;background:radial-gradient(600px 380px at 70% 40%,rgba(47,123,255,.22),transparent 70%),radial-gradient(500px 300px at 15% 10%,rgba(47,123,255,.08),transparent 70%);pointer-events:none}
+.hero .hw{display:grid;grid-template-columns:1fr 1.25fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(46px,6.6vw,86px);margin:.25em 0 .3em}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--blue2),#9cc5ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.ver{margin-top:22px;font-size:14px;color:var(--mut);display:flex;align-items:center;gap:8px}
+.ver b{color:var(--txt);font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+.scr{border-radius:14px;padding:10px;background:linear-gradient(160deg,#232b36,#0b0e13 60%);box-shadow:0 40px 80px -30px rgba(0,0,0,.9),0 0 0 1px #2b3442,inset 0 1px 0 rgba(255,255,255,.08)}
+.scr img{border-radius:6px;width:100%;height:auto;aspect-ratio:1024/600;object-fit:cover}
+.hero .scr{transform:perspective(1600px) rotateY(-14deg) rotateX(4deg);transition:transform .8s}
+.hero .scr:hover{transform:perspective(1600px) rotateY(-6deg) rotateX(2deg)}
+.glow{position:absolute;inset:auto 10% -30px;height:60px;background:var(--blue);filter:blur(60px);opacity:.35;z-index:-1}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:80px}
+.stats div{background:var(--bg2);padding:26px 24px}
+.stats b{display:block;font-size:40px;font-weight:600;line-height:1}
+.stats span{color:var(--mut);font-size:14px;letter-spacing:.04em}
+/* cockpits */
+.tabs{display:flex;gap:8px;margin:34px 0 26px;flex-wrap:wrap}
+.tab{padding:10px 18px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--mut);font:600 14px Barlow;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:.2s}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.stage{display:grid;grid-template-columns:1.6fr 1fr;gap:40px;align-items:center}
+.stage .scr img{transition:opacity .35s}
+.stage h3{font-size:30px;margin-bottom:12px}
+.stage p{color:var(--mut)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.chips span{font-size:13px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);color:#c4cdd9}
+/* features */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;margin-top:50px}
+.f{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;overflow:hidden;position:relative;transition:border-color .3s}
+.f:hover{border-color:#2d3a4d}
+.f h3{font-size:24px;margin:10px 0 8px}
+.f p{color:var(--mut);font-size:16px}
+.f .scr{margin-top:22px;padding:6px;border-radius:10px}
+.f .scr img{border-radius:5px}
+.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}.c4{grid-column:span 4}.c12{grid-column:span 12}
+.tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border-radius:6px;background:rgba(47,123,255,.14);color:var(--blue2)}
+.tag.b{background:rgba(61,220,132,.12);color:var(--ok)}
+.ico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:rgba(47,123,255,.12);color:var(--blue2)}
+.ico svg{width:22px;height:22px}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
+.mini .f{padding:24px}
+.mini h3{font-size:20px}
+/* split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.list{list-style:none;margin-top:26px;display:grid;gap:14px}
+.list li{display:flex;gap:14px;color:#c4cdd9}
+.list li:before{content:"";flex:none;width:20px;height:20px;margin-top:3px;border-radius:6px;background:rgba(47,123,255,.15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3 3 7-7' fill='none' stroke='%235aa0ff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") center/16px no-repeat}
+.stack{position:relative;padding-bottom:60px}
+.stack .scr:nth-child(2){position:absolute;width:62%;right:-4%;bottom:0;transform:rotate(2deg)}
+/* compare */
+.cmp{margin-top:50px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.cmp-h{display:grid;grid-template-columns:1.5fr 1fr 1fr}
+.cmp-h>div{padding:30px 26px;background:var(--bg2);border-left:1px solid var(--line)}
+.cmp-h>div:first-child{border:0;display:flex;align-items:flex-end;color:var(--mut);font-size:14px}
+.cmp-h h3{font-size:28px;margin:8px 0 4px}
+.cmp-h .pr{color:var(--mut);font-size:15px}
+.cmp-h .prem{background:linear-gradient(180deg,rgba(47,123,255,.16),var(--bg2));position:relative}
+.cmp-h .prem:before{content:"";position:absolute;inset:0 0 auto;height:2px;background:var(--blue)}
+.row{display:grid;grid-template-columns:1.5fr 1fr 1fr;border-top:1px solid var(--line)}
+.row>div{padding:15px 26px;font-size:16px;display:flex;align-items:center;gap:8px}
+.row>div+div{border-left:1px solid var(--line);color:#c4cdd9}
+.row>div:last-child{background:rgba(47,123,255,.035)}
+.row.g>div{background:var(--bg2)!important;font-weight:600;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);padding:11px 26px}
+.y{color:var(--ok);font-weight:600}.n{color:#4a5566}
+.cmp-f{display:grid;grid-template-columns:1.5fr 1fr 1fr;border-top:1px solid var(--line)}
+.cmp-f>div{padding:22px 26px}
+.cmp-f>div+div{border-left:1px solid var(--line)}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:50px;counter-reset:s}
+.steps .f{counter-increment:s}
+.steps .f:before{content:"0" counter(s);font-size:56px;font-weight:600;line-height:1;color:transparent;-webkit-text-stroke:1px #33445c}
+/* faq */
+.faq{margin-top:40px;display:grid;gap:12px;max-width:860px}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 24px}
+summary{list-style:none;cursor:pointer;padding:20px 0;font-weight:500;font-size:18px;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--blue2);font-size:24px;line-height:1;transition:.2s}
+details[open] summary:after{transform:rotate(45deg)}
+details p{color:var(--mut);padding:0 0 22px}
+/* end */
+.end{text-align:center;padding:120px 0}
+.end:before{content:"";position:absolute;inset:0;background:radial-gradient(500px 260px at 50% 60%,rgba(47,123,255,.18),transparent 70%)}
+.end .cta{justify-content:center}
+footer{border-top:1px solid var(--line);padding:40px 0;color:var(--mut);font-size:14px}
+footer .w{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}*{transition:none!important}}
+@media(max-width:920px){
+ nav ul{display:none}
+ .hero .hw,.stage,.split{grid-template-columns:1fr}
+ .hero .scr{transform:none}
+ .stats{grid-template-columns:1fr 1fr}
+ .c7,.c5,.c6,.c4{grid-column:span 12}
+ .mini,.steps{grid-template-columns:1fr 1fr}
+ .cmp-h,.row,.cmp-f{grid-template-columns:1.3fr 1fr 1fr}
+ .row>div,.cmp-h>div,.cmp-f>div{padding-left:14px;padding-right:14px}
+ section{padding:80px 0}
+}
+@media(max-width:560px){.mini,.steps{grid-template-columns:1fr}.cmp-h h3{font-size:21px}.row>div{font-size:14px}}
+.lang{display:flex;border:1px solid #2a3442;border-radius:10px;overflow:hidden;margin-left:4px}
+.lang button{background:none;border:0;color:var(--mut);font:600 12px Barlow;letter-spacing:.12em;padding:8px 10px;cursor:pointer}
+.lang button.on{background:#1b2533;color:var(--txt)}
+@media(max-width:920px){nav .btn{display:none}.lang{margin-left:auto}}
+</style>
+</head>
+<body>
+
+<nav id="nav"><div class="w">
+ <a href="#" class="logo"><i></i>CARPRIDE<span class="enh">ENHANCED</span></a>
+ <ul>
+  <li><a href="#cockpits" data-en="Dashboards">Cockpits</a></li>
+  <li><a href="#fonctions" data-en="Features">Fonctions</a></li>
+  <li><a href="#comparatif" data-en="Basic / Premium">Basique / Premium</a></li>
+  <li><a href="#installation" data-en="Install">Installation</a></li>
+  <li><a href="#faq">FAQ</a></li>
+ </ul>
+ <a class="btn p" href="#comparatif" data-en="Download">Télécharger</a>
+ <div class="lang"><button data-l="fr">FR</button><button data-l="en">EN</button></div>
+</div></nav>
+
+<header class="hero"><div class="w hw">
+ <div>
+  <div class="eyebrow" data-en="Firmware for Carpuride W702BS">Firmware pour Carpuride W702BS</div>
+  <h1 data-en="Your bike screen,<br><em>finally complete.</em>">Ton écran moto,<br><em>enfin complet.</em></h1>
+  <p class="lead" data-en="Carpride Enhanced turns your Carpuride 702BS into a real dashboard: three gauge layouts, tyre pressures, trip log, alerts and Wi-Fi updates. CarPlay and Android Auto stay untouched.">Carpride Enhanced remplace l'interface de ton Carpuride 702BS par un vrai tableau de bord : trois compteurs, pressions des pneus, carnet de trajets, alertes et mises à jour par Wi-Fi. CarPlay et Android Auto restent intacts.</p>
+  <div class="cta">
+   <a class="btn p" href="#comparatif" data-en="Choose my version">Choisir ma version</a>
+   <a class="btn g" href="#cockpits" data-en="See the screens">Voir les écrans</a>
+  </div>
+  <div class="ver"><span class="dot"></span><span data-en="Current Premium version:">Version Premium actuelle :</span> <b>V15.2.1</b></div>
+ </div>
+ <div style="position:relative">
+  <div class="scr"><img src="assets/img/fr/tft.webp" alt="Carpride Enhanced TFT" width="1024" height="600"></div>
+  <div class="glow"></div>
+ </div>
+</div>
+<div class="w"><div class="stats rv">
+ <div><b>3</b><span data-en="gauge layouts">cockpits au choix</span></div>
+ <div><b>17</b><span data-en="values for the CarPlay / AA bar">valeurs pour la barre CarPlay / AA</span></div>
+ <div><b>FR·EN</b><span data-en="bilingual interface">interface bilingue</span></div>
+ <div><b>0</b><span data-en="changes to the original system">modification du système d'origine</span></div>
+</div></div>
+</header>
+
+<section id="cockpits"><div class="w">
+ <div class="eyebrow" data-en="Three dashboards">Trois compteurs</div>
+ <h2 data-en="A dashboard for every way you ride.">Un cockpit pour chaque façon de rouler.</h2>
+ <p class="lead" data-en="Switch with a long press. Day, night or automatic theme, adjustable shift light and redline.">Passe de l'un à l'autre d'un appui long. Thème jour, nuit ou automatique, shift light et zone rouge réglables.</p>
+ <div class="tabs" role="tablist">
+  <button class="tab on" data-i="0">TFT</button>
+  <button class="tab" data-i="1">Sport</button>
+  <button class="tab" data-i="2">Cockpit</button>
+  <button class="tab" data-i="3" data-en="Day">Jour</button>
+ </div>
+ <div class="stage">
+  <div class="scr"><img id="cpimg" src="assets/img/fr/tft.webp" alt="" width="1024" height="600"></div>
+  <div><h3 id="cpt">TFT</h3><p id="cpd"></p><div class="chips" id="cpc"></div></div>
+ </div>
+</div></section>
+
+<section id="fonctions" style="background:var(--bg2)"><div class="w">
+ <div class="eyebrow" data-en="Premium features">Fonctions Premium</div>
+ <h2 data-en="Everything the screen was missing.">Tout ce qui manquait à l'écran.</h2>
+ <p class="lead" data-en="Every screen works by touch or with the wheel, gloves on.">Chaque écran se pilote au toucher ou à la molette, gants compris.</p>
+ <div class="grid">
+  <div class="f c7 rv"><span class="tag" data-en="My bike">Ma moto</span><h3 data-en="Your bike at a glance">Ta moto en un coup d'œil</h3><p data-en="Engine, air, front / rear pressures, range, battery, trip, altimeter with the ride profile, average and max lean angle. With a photo of your own bike.">Moteur, air, pressions avant / arrière, autonomie, batterie, trip, altimètre avec profil de la sortie, moyenne et angle maxi. Avec la photo de ta propre moto.</p><div class="scr"><img src="assets/img/fr/mamoto.webp" alt="" width="1024" height="600"></div></div>
+  <div class="f c5 rv"><span class="tag" data-en="Trip log">Carnet de trajets</span><h3 data-en="Every ride, recorded">Chaque sortie, enregistrée</h3><p data-en="Distance, riding time, speeds, elevation, lean angles, temperature and altitude profile. CSV export to the SD card.">Distance, temps de roulage, vitesses, dénivelé, angles, température et profil d'altitude. Export CSV sur la carte SD.</p><div class="scr"><img src="assets/img/fr/carnet.webp" alt="" width="1024" height="600"></div></div>
+  <div class="f c5 rv"><span class="tag" data-en="Alerts">Alertes</span><h3 data-en="Warned before trouble">Prévenu avant le problème</h3><p data-en="Ice risk, low range, low battery, under-inflated tyres at start. The message also shows inside CarPlay and Android Auto.">Verglas, autonomie basse, batterie faible, pneus sous-gonflés au démarrage. Le message s'affiche aussi dans CarPlay et Android Auto.</p><div class="scr"><img src="assets/img/fr/verglas.webp" alt="" width="1024" height="600"></div></div>
+  <div class="f c7 rv"><span class="tag" data-en="Maintenance">Entretien</span><h3 data-en="Your service book, on screen">Le carnet d'entretien dans l'écran</h3><p data-en="Oil change, service, tyres, brake pads: each line tracks its interval in kilometres and warns you as it gets close.">Vidange, révision, pneus, plaquettes : chaque ligne suit son intervalle en kilomètres et prévient quand l'échéance approche.</p><div class="scr"><img src="assets/img/fr/entretien.webp" alt="" width="1024" height="600"></div></div>
+ </div>
+ <div class="mini">
+  <div class="f rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M8 4v5"/></svg></div><h3 data-en="SD backup">Sauvegarde SD</h3><p data-en="Settings, trip log and maintenance exported and restored in one tap.">Réglages, carnet et entretien exportés et réimportés en un appui.</p></div>
+  <div class="f rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg></div><h3 data-en="Records &amp; timer">Records &amp; chrono</h3><p data-en="Top speed, left / right lean, 0-100 timer, with separate trip / records reset.">Vitesse maxi, angles gauche / droite, chrono 0-100 et remise à zéro séparée trajet / records.</p></div>
+  <div class="f rv"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></div><h3>Français / English</h3><p data-en="The whole interface in both languages, switchable in the settings.">Toute l'interface dans les deux langues, à changer dans les réglages.</p></div>
+ </div>
+</div></section>
+
+<section><div class="w split">
+ <div class="rv">
+  <div class="eyebrow">CarPlay &amp; Android Auto</div>
+  <h2 data-en="Your bike data, even on the GPS.">Tes infos moto, même pendant le GPS.</h2>
+  <p class="lead" data-en="During CarPlay or Android Auto, a slim bar shows the values you pick.">Pendant CarPlay ou Android Auto, une barre fine affiche les valeurs que tu choisis.</p>
+  <ul class="list">
+   <li data-en="5 presets: Touring, Sport, Technical, Classic, Custom">5 préréglages : Voyage, Sport, Technique, Classique, Perso</li>
+   <li data-en="17 values to choose from: pressures, range, altitude, lean, elevation…">17 valeurs au choix : pressions, autonomie, altitude, angle, dénivelé…</li>
+   <li data-en="Clock and brake indicators can be turned on">Heure et témoins de freins activables</li>
+  </ul>
+ </div>
+ <div class="stack rv">
+  <div class="scr"><img src="assets/img/fr/barre.webp" alt="" width="1024" height="600"></div>
+  <div class="scr"><img src="assets/img/fr/aa.webp" alt="" width="1024" height="600"></div>
+ </div>
+</div></section>
+
+<section style="background:var(--bg2)"><div class="w split">
+ <div class="stack rv">
+  <div class="scr"><img src="assets/img/fr/maj.webp" alt="" width="1024" height="600"></div>
+  <div class="scr"><img src="assets/img/fr/clavier.webp" alt="" width="1024" height="600"></div>
+ </div>
+ <div class="rv">
+  <div class="eyebrow" data-en="Wi-Fi updates">Mises à jour Wi-Fi</div>
+  <h2 data-en="No more SD card to update.">Plus besoin de carte SD pour mettre à jour.</h2>
+  <p class="lead" data-en="The screen joins your Wi-Fi or your phone's hotspot and installs new versions by itself.">L'écran se connecte à ton Wi-Fi ou au partage de ton téléphone et installe les nouvelles versions tout seul.</p>
+  <ul class="list">
+   <li data-en="Every update is signed: the screen refuses any altered file">Chaque mise à jour est signée : l'écran refuse tout fichier modifié</li>
+   <li data-en="Automatic return to the previous version if an update fails to start">Retour automatique à la version précédente si une mise à jour ne démarre pas</li>
+   <li data-en="Password typed on a touch keyboard">Mot de passe saisi au clavier tactile</li>
+  </ul>
+ </div>
+</div></section>
+
+<section><div class="w split">
+ <div class="rv">
+  <div class="eyebrow" data-en="New in V15.2">Nouveau en V15.2</div>
+  <h2 data-en="Clear settings, a lean gauge set to zero.">Des réglages clairs, une inclinaison bien à zéro.</h2>
+  <p class="lead" data-en="Settings are split into four tabs, and the lean gauge can be calibrated on your own bike.">Les réglages sont rangés en quatre onglets, et la jauge d'inclinaison se calibre sur ta moto.</p>
+  <ul class="list">
+   <li data-en="4 tabs: Display, Bike, Alerts, System, by touch or with the wheel">4 onglets : Affichage, Moto, Alertes, Système, au toucher ou à la molette</li>
+   <li data-en="Lean calibration: bike upright on level ground, one tap on CALIBRATE">Calibration de l'inclinaison : moto droite sur sol plat, un appui sur CALIBRER</li>
+   <li data-en="The offset applies everywhere: gauges, max lean, records and trip log">L'écart est corrigé partout : jauges, angles maxi, records et carnet</li>
+   <li data-en="Long press on the Sport lean gauge: reset maxis or calibrate">Appui long sur la jauge du compteur Sport : maxis à zéro ou calibration</li>
+  </ul>
+ </div>
+ <div class="stack rv">
+  <div class="scr"><img src="assets/img/fr/moto.webp" alt="" width="1024" height="600"></div>
+  <div class="scr"><img src="assets/img/fr/calib.webp" alt="" width="1024" height="600"></div>
+ </div>
+</div></section>
+
+<section id="comparatif"><div class="w">
+ <div class="eyebrow" data-en="Two versions">Deux versions</div>
+ <h2 data-en="Basic or Premium?">Basique ou Premium ?</h2>
+ <p class="lead" data-en="Basic is free and gives you a clean dashboard. Premium unlocks everything else, with a licence tied to your device.">La Basique est gratuite et suffit pour un compteur propre. La Premium débloque tout le reste, avec une licence liée à ton appareil.</p>
+ <div class="cmp rv">
+  <div class="cmp-h">
+   <div data-en="Features">Fonctions</div>
+   <div><span class="tag b" data-en="Free">Gratuite</span><h3 data-en="Basic">Basique</h3><div class="pr">Version 1.7</div></div>
+   <div class="prem"><span class="tag" data-en="Complete">Complète</span><h3>Premium</h3><div class="pr" data-en="Version 15.2.1 · licence per device">Version 15.2.1 · licence par appareil</div></div>
+  </div>
+  <div class="row g"><div data-en="Dashboards">Compteurs</div><div></div><div></div></div>
+  <div class="row"><div data-en="TFT dashboard">Compteur TFT</div><div class="y">✓</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Sport and Cockpit dashboards">Compteurs Sport et Cockpit</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Day / night theme">Thème jour / nuit</div><div data-en="Manual">Manuel</div><div data-en="Auto, day, night">Auto, jour, nuit</div></div>
+  <div class="row"><div data-en="Adjustable shift light and redline">Shift light, zone rouge réglables</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row g"><div data-en="My bike">Ma moto</div><div></div><div></div></div>
+  <div class="row"><div data-en="Pressures, temperatures, battery, range">Pressions, températures, batterie, autonomie</div><div class="y">✓</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Photo of your bike">Photo de ta moto</div><div class="y">✓</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Max lean left / right">Angle maxi gauche / droite</div><div class="y">✓</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Lean angle calibration">Calibration de l'inclinaison</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Altimeter and altitude profile">Altimètre et profil d'altitude</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Trip log + CSV export">Carnet de trajets + export CSV</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Maintenance log">Carnet d'entretien</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Ice, range, battery, tyre alerts">Alertes verglas, autonomie, batterie, pneus</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row g"><div data-en="System">Système</div><div></div><div></div></div>
+  <div class="row"><div data-en="Custom CarPlay / Android Auto bar">Barre CarPlay / Android Auto personnalisable</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="SD backup of settings">Sauvegarde SD des réglages</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="French / English interface">Interface français / anglais</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Wi-Fi updates">Mises à jour par Wi-Fi</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="row"><div data-en="Custom boot logo">Logo de démarrage personnalisé</div><div class="n">—</div><div class="y">✓</div></div>
+  <div class="cmp-f"><div></div>
+   <div><a class="btn g" href="https://ko-fi.com/s/40777eaad8" target="_blank" rel="noopener" data-en="Download">Télécharger</a></div>
+   <div><a class="btn p premium-link" href="#contact" data-en="Get Premium">Obtenir Premium</a></div>
+  </div>
+ </div>
+</div></section>
+
+<section id="installation" style="background:var(--bg2)"><div class="w">
+ <div class="eyebrow">Installation</div>
+ <h2 data-en="Four steps, one SD card.">Quatre étapes, une carte SD.</h2>
+ <div class="steps">
+  <div class="f rv"><h3 data-en="Download">Télécharge</h3><p data-en="The file for your version (Basic, or Premium generated for your screen).">Le fichier de ta version (Basique, ou Premium généré pour ton écran).</p></div>
+  <div class="f rv"><h3 data-en="Copy">Copie</h3><p data-en="Put the file at the root of a FAT32 micro-SD card.">Le fichier à la racine d'une carte micro-SD formatée en FAT32.</p></div>
+  <div class="f rv"><h3 data-en="Flash">Flashe</h3><p data-en="Insert the card and the screen updates itself. Don't switch off during the update.">Insère la carte, l'écran se met à jour seul. Ne coupe pas le contact pendant l'opération.</p></div>
+  <div class="f rv"><h3 data-en="Ride">Roule</h3><p data-en="Later Premium versions then arrive over Wi-Fi.">Les versions suivantes de la Premium arrivent ensuite par Wi-Fi.</p></div>
+ </div>
+</div></section>
+
+<section id="faq"><div class="w">
+ <div class="eyebrow" data-en="Questions">Questions</div>
+ <h2>FAQ</h2>
+ <div class="faq">
+  <details><summary data-en="Is it a full firmware, a visual theme or a change to the existing software?">S'agit-il d'un firmware complet, d'un thème graphique ou d'une modification du logiciel ?</summary><p data-en="It's a software layer installed on top of the original firmware, without touching its functions: CarPlay, Android Auto, Bluetooth and Carpuride settings stay the original ones.">C'est une couche logicielle qui s'installe par-dessus le firmware d'origine, sans toucher à ses fonctions : CarPlay, Android Auto, Bluetooth et réglages Carpuride restent ceux d'origine.</p></details>
+  <details><summary data-en="Which 702BS versions and hardware revisions are supported?">Quelles versions du 702BS et quelles révisions matérielles sont compatibles ?</summary><p data-en="Every version of the 702BS and 702BS Pro. Differences between hardware revisions are handled by the screen's original functions. Other models, including the touch-only 702, are not supported.">Toutes les versions du 702BS et du 702BS Pro. Les différences entre révisions matérielles sont gérées par les fonctions d'origine de l'écran. Les autres modèles, dont le 702 tactile, ne sont pas pris en charge.</p></details>
+  <details><summary data-en="Is there a tested way back to the official software?">Existe-t-il une méthode testée pour revenir au logiciel officiel ?</summary><p data-en="Yes: flash the original firmware from an SD card, which we provide. Carpride Enhanced never touches the bootloader, the kernel or the system.">Oui : un flash par carte SD du firmware d'origine, que nous te fournissons. Carpride Enhanced ne touche ni au bootloader, ni au noyau, ni au système.</p></details>
+  <details><summary data-en="Can installing it affect the manufacturer's warranty?">Une installation peut-elle affecter la garantie constructeur ?</summary><p data-en="No: going back to the original firmware is always possible, and the screen then runs exactly its official software again.">Non : le retour au firmware d'origine est toujours possible, et l'écran retrouve alors exactement son logiciel officiel.</p></details>
+  <details><summary data-en="Do CarPlay and Android Auto still work?">CarPlay et Android Auto fonctionnent-ils toujours ?</summary><p data-en="Yes, they are the original ones. Carpride Enhanced only adds the info bar at the bottom of the screen.">Oui, ils restent ceux d'origine. Carpride Enhanced ajoute seulement la barre d'informations en bas de l'écran.</p></details>
+  <details><summary data-en="Is the Premium licence lifetime, updates included?">La licence Premium est-elle perpétuelle, mises à jour comprises ?</summary><p data-en="Yes. The licence is permanent, it never expires and all future updates are included.">Oui. La licence est définitive, elle n'expire jamais et toutes les futures mises à jour sont incluses.</p></details>
+  <details><summary data-en="Is the licence tied to the device, and transferable if it's replaced under warranty?">La licence est-elle liée à l'appareil, et transférable en cas de remplacement sous garantie ?</summary><p data-en="Yes: the licence is tied to your device. If your screen is replaced under warranty, it's moved to the new one.">Oui : la licence est liée à ton appareil. Si ton écran est remplacé sous garantie, elle est transférée sur le nouveau.</p></details>
+  <details><summary data-en="What if Carpuride changes its firmware?">Que se passe-t-il si Carpuride modifie son firmware ?</summary><p data-en="Carpride Enhanced can't be blocked remotely. It stays in place as long as you don't reinstall an original Carpuride firmware.">Carpride Enhanced ne peut pas être bloqué à distance. Il reste en place tant que tu ne réinstalles pas un firmware Carpuride d'origine.</p></details>
+  <details><summary data-en="Support if the install fails?">Assistance si l'installation échoue ?</summary><p data-en="Yes: if the install fails on a screen listed as compatible, we help you until everything works.">Oui : si l'installation échoue sur un écran annoncé compatible, tu es accompagné jusqu'à ce que tout fonctionne.</p></details>
+  <details><summary data-en="Where does the lean angle come from, and can it be calibrated?">D'où vient l'angle d'inclinaison, et peut-on le calibrer ?</summary><p data-en="It comes from the sensor built into the Carpuride screen. If the screen is mounted slightly tilted, SETTINGS > BIKE > LEAN ANGLE > CALIBRATE sets the zero with the bike upright on level ground (Premium).">Il vient du capteur intégré à l'écran Carpuride. Si l'écran est monté un peu penché, RÉGLAGES > MOTO > INCLINAISON > CALIBRER remet le zéro, moto droite sur sol plat (Premium).</p></details>
+  <details><summary data-en="Are Wi-Fi updates safe?">Les mises à jour Wi-Fi sont-elles sûres ?</summary><p data-en="Every update is signed and checked before it installs. If a new version doesn't start properly, the screen goes back to the previous one by itself.">Chaque mise à jour est signée et vérifiée avant installation. Si une nouvelle version ne démarre pas correctement, l'écran revient de lui-même à la version précédente.</p></details>
+ </div>
+</div></section>
+
+<section class="end" id="contact"><div class="w" style="position:relative">
+ <div class="eyebrow" data-en="Ready to ride?">Prêt à rouler ?</div>
+ <h2 data-en="Give your 702BS a second life.">Donne une seconde vie à ton 702BS.</h2>
+ <div class="cta">
+  <a class="btn p" href="https://ko-fi.com/s/40777eaad8" target="_blank" rel="noopener" data-en="Download Basic">Télécharger la Basique</a>
+  <a class="btn g premium-link" href="#contact" data-en="Get Premium">Obtenir la Premium</a>
+ </div>
+</div></section>
+
+<footer><div class="w">
+ <div><a class="logo" href="#"><i></i>CARPRIDE<span class="enh">ENHANCED</span></a><p style="margin-top:12px;max-width:560px" data-en="Independent project, not affiliated with Carpuride or BMW. Names belong to their owners. Use at your own risk; don't operate the screen while riding.">Projet indépendant, non affilié à Carpuride ni à BMW. Les noms cités appartiennent à leurs propriétaires. Utilisation à tes risques ; ne manipule pas l'écran en roulant.</p></div>
+ <div>© 2026 Carpride Enhanced</div>
+</div></footer>
+
+<script>
+// Lien Premium : remplacer par l'URL définitive
+// Lien Premium : mettre l'adresse ici (vide = boutons « Bientôt disponible »)
+const PREMIUM_URL='';
+document.querySelectorAll('.premium-link').forEach(a=>{
+ if(PREMIUM_URL){a.href=PREMIUM_URL;a.target='_blank';a.rel='noopener'}
+ else{a.removeAttribute('href');a.classList.add('soon');a.setAttribute('aria-disabled','true');a.dataset.en='Coming soon';a.innerHTML=a.dataset.fr='Bientôt disponible'}});
+let L='fr';
+const CP=[
+ {t:['TFT','TFT'],i:'tft',d:["Le compteur principal, inspiré des TFT modernes : barre de régime segmentée, vitesse et rapport en grand, quatre cases d'infos en bas.","The main dashboard, inspired by modern TFTs: segmented rev bar, big speed and gear, four info tiles at the bottom."],c:[['Régime segmenté','Rapport engagé',"4 cases d'infos"],['Segmented revs','Gear shown','4 info tiles']]},
+ {t:['Sport','Sport'],i:'sport',d:["Compte-tours circulaire, inclinaison en direct avec maxis gauche / droite, chrono 0-100 avec record, accélération et freinage.","Round rev counter, live lean angle with left / right max, 0-100 timer with record, acceleration and braking."],c:[['Inclinaison','Chrono 0-100','Accél. / frein'],['Lean angle','0-100 timer','Accel. / brake']]},
+ {t:['Cockpit','Cockpit'],i:'cockpit',d:["Deux cadrans à aiguilles façon instrumentation classique, compteur kilométrique et trip au centre.","Two needle dials like classic clocks, odometer and trip in the middle."],c:[['Aiguilles','Odomètre','Trip'],['Needles','Odometer','Trip']]},
+ {t:['Thème jour','Day theme'],i:'tftjour',d:["Un thème clair lisible en plein soleil. En mode Auto, l'écran bascule seul entre jour et nuit.","A light theme readable in full sun. In Auto mode the screen switches between day and night by itself."],c:[['Auto','Jour','Nuit'],['Auto','Day','Night']]}
+];
+let cur=0;const img=document.getElementById('cpimg');
+function sel(n,fade){cur=n;const x=CP[n],k=L=='en'?1:0;document.querySelectorAll('.tab').forEach((b,j)=>b.classList.toggle('on',j==n));
+ const go=()=>{img.src='assets/img/'+L+'/'+x.i+'.webp';img.alt=x.t[k];img.style.opacity=1};
+ if(fade){img.style.opacity=0;setTimeout(go,180)}else go();
+ cpt.textContent=x.t[k];cpd.textContent=x.d[k];cpc.innerHTML=x.c[k].map(s=>'<span>'+s+'</span>').join('')}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>sel(+b.dataset.i,1));
+const T=[...document.querySelectorAll('[data-en]')];T.forEach(e=>e.dataset.fr=e.innerHTML);
+function setLang(l){L=l;document.documentElement.lang=l;
+ T.forEach(e=>e.innerHTML=e.dataset[l]);
+ document.querySelectorAll('img[src*="assets/img/"]').forEach(i=>i.src=i.src.replace(/\/(fr|en)\//,'/'+l+'/'));
+ document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l==l));
+ document.title=l=='en'?'Carpride Enhanced — firmware for Carpuride W702BS':'Carpride Enhanced — firmware amélioré pour Carpuride W702BS';
+ sel(cur);try{localStorage.setItem('cp_lang',l)}catch(e){}}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+let saved=null;try{saved=localStorage.getItem('cp_lang')}catch(e){}
+const q=new URLSearchParams(location.search).get('lang');
+setLang(q=='en'||q=='fr'?q:saved||((navigator.language||'fr').toLowerCase().startsWith('fr')?'fr':'en'));
+addEventListener('scroll',()=>nav.classList.toggle('s',scrollY>20),{passive:true});
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.12});
+document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+</script>
+</body>
+</html>
